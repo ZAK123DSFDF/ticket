@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5173", // Change this for production
+    origin: process.env.CLIENT_URL, // Change this for production
     credentials: true, // Allow cookies to be sent
   }),
 );
