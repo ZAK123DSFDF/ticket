@@ -95,6 +95,7 @@ export default function UserTickets() {
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
+          width: "100vw",
         }}
       >
         <CircularProgress />

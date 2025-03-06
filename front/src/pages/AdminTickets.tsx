@@ -90,6 +90,7 @@ export default function AdminTickets() {
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
+          width: "100vw",
         }}
       >
         <CircularProgress />
