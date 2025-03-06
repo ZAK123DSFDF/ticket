@@ -1,6 +1,13 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Box, Button, TextField, Alert } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  Alert,
+  Paper,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 import { useAuth, User } from "../providers/AuthProvider";
 
@@ -10,7 +17,7 @@ export default function Login() {
   const queryClient = useQueryClient();
   const [emailError, setEmailError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
-  const [serverError, setServerError] = useState<string | null>(null); // Show API error
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -42,11 +49,9 @@ export default function Login() {
       };
       setUser(userData);
       queryClient.invalidateQueries({ queryKey: ["user"] });
-      if (userData.user.role === "ADMIN") {
-        navigate("/admin-tickets");
-      } else {
-        navigate("/user-tickets");
-      }
+      navigate(
+        userData.user.role === "ADMIN" ? "/admin-tickets" : "/user-tickets",
+      );
     },
     onError: (error: Error) => {
       setServerError(error.message);
@@ -55,7 +60,7 @@ export default function Login() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setServerError(null); // Reset server error on new submission
+    setServerError(null);
 
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email") as string;
@@ -84,45 +89,72 @@ export default function Login() {
 
   return (
     <Box
-      component="form"
       sx={{
-        width: "100%",
-        maxWidth: 360,
         display: "flex",
-        flexDirection: "column",
-        gap: 2,
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        width: "100vw",
+        backgroundColor: "#f4f4f4",
       }}
-      onSubmit={handleSubmit}
     >
-      {serverError && <Alert severity="error">{serverError}</Alert>}
-      <TextField
-        required
-        error={!!emailError}
-        helperText={emailError}
-        label="Email"
-        name="email"
-        placeholder="Enter your email"
-        type="email"
-      />
-      <TextField
-        required
-        error={!!passwordError}
-        helperText={passwordError}
-        label="Password"
-        name="password"
-        placeholder="Enter your password"
-        type="password"
-      />
-      <Box sx={{ display: "flex", gap: 2 }}>
-        <Button
-          variant="contained"
-          color="primary"
-          type="submit"
-          disabled={loginMutation.isPending}
-        >
-          {loginMutation.isPending ? "Logging in..." : "Submit"}
-        </Button>
-      </Box>
+      <Paper
+        elevation={3}
+        sx={{
+          padding: 4,
+          width: "100%",
+          maxWidth: 400,
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          boxShadow: 3,
+          borderRadius: 2,
+          backgroundColor: "white",
+          margin: "auto", // Center the Paper
+        }}
+      >
+        <Box component="form" onSubmit={handleSubmit}>
+          {serverError && <Alert severity="error">{serverError}</Alert>}
+          <TextField
+            required
+            fullWidth
+            error={!!emailError}
+            helperText={emailError}
+            label="Email"
+            name="email"
+            placeholder="Enter your email"
+            type="email"
+            margin="normal"
+          />
+          <TextField
+            required
+            fullWidth
+            error={!!passwordError}
+            helperText={passwordError}
+            label="Password"
+            name="password"
+            placeholder="Enter your password"
+            type="password"
+            margin="normal"
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            fullWidth
+            disabled={loginMutation.isPending}
+            sx={{ marginTop: 2 }}
+          >
+            {loginMutation.isPending ? "Logging in..." : "Submit"}
+          </Button>
+        </Box>
+        <Typography variant="body2" align="center" sx={{ marginTop: 2 }}>
+          Don't have an account?{" "}
+          <Link to="/signup" style={{ color: "blue" }}>
+            Sign up
+          </Link>
+        </Typography>
+      </Paper>
     </Box>
   );
 }

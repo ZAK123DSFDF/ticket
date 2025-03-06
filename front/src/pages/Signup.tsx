@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import {
   Box,
@@ -9,6 +9,8 @@ import {
   Select,
   FormControl,
   InputLabel,
+  Paper,
+  Typography,
 } from "@mui/material";
 import { useState } from "react";
 import { useAuth, User } from "../providers/AuthProvider";
@@ -44,7 +46,7 @@ export default function Signup() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || "Signup failed"); // Use `errorData.error`
+        throw new Error(errorData.error || "Signup failed");
       }
 
       return response.json();
@@ -62,7 +64,7 @@ export default function Signup() {
       }
     },
     onError: (error: Error) => {
-      setServerError(error.message); // Set the server error message
+      setServerError(error.message);
     },
   });
 
@@ -104,60 +106,83 @@ export default function Signup() {
 
   return (
     <Box
-      component="form"
       sx={{
-        width: "100%",
-        maxWidth: 360,
         display: "flex",
-        flexDirection: "column",
-        gap: 2,
-        margin: "auto",
-        mt: 4,
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        width: "100vw", // Ensure the Box takes up the full viewport width
+        backgroundColor: "#f4f4f4",
       }}
-      onSubmit={handleSubmit}
     >
-      {serverError && <Alert severity="error">{serverError}</Alert>}
-      <TextField
-        required
-        error={!!emailError}
-        helperText={emailError}
-        label="Email"
-        name="email"
-        placeholder="Enter your email"
-        type="email"
-      />
-      <TextField
-        required
-        error={!!passwordError}
-        helperText={passwordError}
-        label="Password"
-        name="password"
-        placeholder="Enter your password"
-        type="password"
-      />
-      <FormControl required error={!!roleError}>
-        <InputLabel>Role</InputLabel>
-        <Select
-          value={role}
-          onChange={(e) => setRole(e.target.value as string)}
-          label="Role"
-          name="role"
-        >
-          <MenuItem value="ADMIN">ADMIN</MenuItem>
-          <MenuItem value="USER">USER</MenuItem>
-        </Select>
-        {roleError && <Alert severity="error">{roleError}</Alert>}
-      </FormControl>
-      <Box sx={{ display: "flex", gap: 2 }}>
-        <Button
-          variant="contained"
-          color="primary"
-          type="submit"
-          disabled={signupMutation.isPending}
-        >
-          {signupMutation.isPending ? "Signing up..." : "Submit"}
-        </Button>
-      </Box>
+      <Paper
+        elevation={3}
+        sx={{
+          padding: 4,
+          width: "100%",
+          maxWidth: 400,
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          boxShadow: 3,
+          borderRadius: 2,
+          backgroundColor: "white",
+        }}
+      >
+        <Box component="form" onSubmit={handleSubmit}>
+          {serverError && <Alert severity="error">{serverError}</Alert>}
+          <TextField
+            required
+            fullWidth
+            error={!!emailError}
+            helperText={emailError}
+            label="Email"
+            name="email"
+            placeholder="Enter your email"
+            type="email"
+            margin="normal"
+          />
+          <TextField
+            required
+            fullWidth
+            error={!!passwordError}
+            helperText={passwordError}
+            label="Password"
+            name="password"
+            placeholder="Enter your password"
+            type="password"
+            margin="normal"
+          />
+          <FormControl fullWidth required error={!!roleError} margin="normal">
+            <InputLabel>Role</InputLabel>
+            <Select
+              value={role}
+              onChange={(e) => setRole(e.target.value as string)}
+              label="Role"
+              name="role"
+            >
+              <MenuItem value="ADMIN">ADMIN</MenuItem>
+              <MenuItem value="USER">USER</MenuItem>
+            </Select>
+            {roleError && <Alert severity="error">{roleError}</Alert>}
+          </FormControl>
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            fullWidth
+            disabled={signupMutation.isPending}
+            sx={{ marginTop: 2 }}
+          >
+            {signupMutation.isPending ? "Signing up..." : "Submit"}
+          </Button>
+        </Box>
+        <Typography variant="body2" align="center" sx={{ marginTop: 2 }}>
+          <Link to="/login" style={{ color: "blue" }}>
+            Login
+          </Link>
+        </Typography>
+      </Paper>
     </Box>
   );
 }
