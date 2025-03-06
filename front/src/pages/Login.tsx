@@ -4,8 +4,6 @@ import { Box, Button, TextField, Alert } from "@mui/material";
 import { useState } from "react";
 import { useAuth, User } from "../providers/AuthProvider";
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 export default function Login() {
   const navigate = useNavigate();
   const { setUser } = useAuth();
@@ -21,7 +19,7 @@ export default function Login() {
 
   const loginMutation = useMutation({
     mutationFn: async (data: { email: string; password: string }) => {
-      const response = await fetch(`${API_URL}/signin`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -13,8 +13,6 @@ import {
 import { useState } from "react";
 import { useAuth, User } from "../providers/AuthProvider";
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 export default function Signup() {
   const navigate = useNavigate();
   const { setUser } = useAuth();
@@ -35,7 +33,7 @@ export default function Signup() {
       password: string;
       role: string;
     }) => {
-      const response = await fetch(`${API_URL}/signup`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

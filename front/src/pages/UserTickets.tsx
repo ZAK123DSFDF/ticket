@@ -26,9 +26,12 @@ export default function UserTickets() {
   } = useQuery<Ticket[], Error>({
     queryKey: ["userTickets"],
     queryFn: async () => {
-      const response = await fetch("http://localhost:5000/userTickets", {
-        credentials: "include", // Include credentials if needed
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/userTickets`,
+        {
+          credentials: "include", // Include credentials if needed
+        },
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch tickets");
       }
@@ -39,7 +42,7 @@ export default function UserTickets() {
   // Create a new ticket
   const mutation = useMutation<Ticket, Error, NewTicket>({
     mutationFn: async (newTicket) => {
-      const response = await fetch("http://localhost:5000/tickets", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/tickets`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

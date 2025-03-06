@@ -15,7 +15,7 @@ export default function AdminTickets() {
   const { data, error, isLoading } = useQuery<Ticket[], Error>({
     queryKey: ["tickets"],
     queryFn: async () => {
-      const response = await fetch("http://localhost:5000/tickets", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/tickets`, {
         credentials: "include",
       });
       if (!response.ok) {
@@ -29,7 +29,7 @@ export default function AdminTickets() {
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
       const response = await fetch(
-        `http://localhost:5000/tickets/${id}/status`,
+        `${import.meta.env.VITE_API_URL}/tickets/${id}/status`,
         {
           method: "PATCH",
           headers: {
