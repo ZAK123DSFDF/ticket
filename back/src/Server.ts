@@ -88,7 +88,7 @@ app.post("/signup", async (req: Request, res: Response): Promise<any> => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     });
 
     return res
@@ -144,7 +144,7 @@ app.post("/signin", async (req: Request, res: Response): Promise<any> => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     });
 
     // Return success response
