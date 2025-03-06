@@ -35,7 +35,7 @@ export const useAuth = (): AuthContextType => {
 
 // Fetch user data
 const fetchUser = async (): Promise<User | null> => {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/auth-status`, {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}auth-status`, {
     credentials: "include",
   });
   if (!response.ok) return null;
